@@ -1,5 +1,39 @@
 @import "tailwindcss";
 
+:root {
+  /* Deep Blue Light Theme (Navy Profundo, Safira Real, Aço Glacial & Ouro) */
+  --color-bg: #EEF4F9; /* Crystalline Ice Slate Blue */
+  --color-card: #FFFFFF; /* Crisp Cloud White */
+  --color-text: #07152B; /* Deep Navy Obsidian */
+  --color-primary: #0A3D78; /* Deep Royal Navy Blue */
+  --color-primary-light: #16569B; /* Deep Sapphire Blue */
+  --color-primary-deep: #052147; /* Ultra Deep Navy */
+  --color-accent: #0D9488; /* Deep Teal Accent */
+  --color-accent-hover: #0F766E;
+  --color-muted: #CAD8E8; /* Precise Crisp Navy Border */
+  --color-muted-bg: #E1ECF6; /* Deep Ice Blue Mist */
+  --color-muted-text: #3D5570; /* Slate Navy Readable Text */
+  --color-gold: #B45309; /* Imperial Amber Gold */
+  --shadow-hover: 0 8px 24px -4px rgba(10, 61, 120, 0.22);
+}
+
+[data-theme='dark'] {
+  /* Deep Oceanic Abyss & Sapphire Twilight Theme */
+  --color-bg: #030816; /* Deep Ocean Abyss Black-Blue */
+  --color-card: #07142E; /* Deep Sapphire Navy */
+  --color-text: #F1F5F9; /* Crisp Polar White */
+  --color-primary: #2563EB; /* Deep Vivid Cobalt Blue */
+  --color-primary-light: #60A5FA; /* Electric Sapphire */
+  --color-primary-deep: #1D4ED8; /* Deep Royal Blue */
+  --color-accent: #10B981; /* Emerald Accent */
+  --color-accent-hover: #059669;
+  --color-muted: #142850; /* Deep Navy Night Border */
+  --color-muted-bg: #0C1D3F; /* Deep Sapphire Box */
+  --color-muted-text: #92A7C6; /* Crisp Twilight Slate */
+  --color-gold: #F59E0B;
+  --shadow-hover: 0 8px 26px -4px rgba(37, 99, 235, 0.3);
+}
+
 @layer utilities {
   .hide-scrollbar::-webkit-scrollbar {
     display: none;
@@ -9,57 +43,52 @@
     scrollbar-width: none;
   }
   .glass {
-    @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.08];
+    background-color: var(--color-card);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--color-muted);
   }
-  .glass-neon {
-    @apply bg-black/60 backdrop-blur-xl border border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.15)];
+  
+  /* Geometric 80-degree angles & sharp corners aesthetic */
+  .sharp-corner {
+    border-radius: 2px;
   }
-  .neon-glow-cyan {
-    box-shadow: 0 0 20px rgba(34, 211, 238, 0.35);
+  .angle-cut-80 {
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
   }
-  .neon-glow-amber {
-    box-shadow: 0 0 20px rgba(245, 158, 11, 0.35);
+  .angle-cut-double-80 {
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
   }
-  .neon-glow-purple {
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
+  .angle-pill-80 {
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
   }
-  .neon-border-cyan {
-    border-color: rgba(34, 211, 238, 0.4);
+  .corner-accent-80 {
+    position: relative;
   }
-  .cyber-grid {
-    background-size: 40px 40px;
-    background-image: 
-      linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-  }
-  .cyber-dots {
-    background-image: radial-gradient(rgba(34, 211, 238, 0.12) 1px, transparent 0);
-    background-size: 28px 28px;
-  }
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(34, 211, 238, 0.3);
-    border-radius: 9999px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(34, 211, 238, 0.6);
+  .corner-accent-80::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    border-top: 2px solid var(--color-primary);
+    border-right: 2px solid var(--color-primary);
   }
 }
 
 body {
-  @apply bg-[#050608] text-gray-100 font-sans antialiased overflow-x-hidden selection:bg-cyan-400 selection:text-black;
-  background-image: 
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(14, 165, 233, 0.08), transparent 70%),
-    linear-gradient(to bottom, rgba(5, 6, 8, 0.98), #050608);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
   min-height: 100vh;
 }
 
 #root {
-  @apply min-h-screen flex flex-col;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
+

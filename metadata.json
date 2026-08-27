@@ -1,6 +1,6 @@
 {
   "name": "HOC Academy",
-  "description": "Plataforma de ensino modular com design arquitetural coeso, acessibilidade avançada e central Studio.",
+  "description": "Plataforma de ensino com perfil pessoal completo, design geométrico de ângulos nítidos e paleta azul profunda.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

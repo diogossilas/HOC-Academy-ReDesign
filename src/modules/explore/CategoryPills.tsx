@@ -1,5 +1,3 @@
-import { motion } from 'motion/react';
-
 export const EXPLORE_CATEGORIES = [
   '10 Melhores',
   'Novidades',
@@ -24,7 +22,7 @@ export default function CategoryPills({
 }: CategoryPillsProps) {
   return (
     <div
-      className="flex flex-wrap gap-2 p-1.5 bg-white/5 rounded-2xl border border-white/10"
+      className="flex flex-wrap gap-2 p-1.5 bg-[var(--color-muted-bg)] sharp-corner border border-[var(--color-muted)]"
       aria-label="Categorias de Exploração"
     >
       {categories.map((cat) => {
@@ -33,10 +31,10 @@ export default function CategoryPills({
           <button
             key={cat}
             onClick={() => onSelect(cat)}
-            className={`relative px-5 py-2.5 rounded-xl text-xs md:text-sm font-medium transition-all duration-300 readable select-none ${
+            className={`relative px-4 py-2 sharp-corner text-xs md:text-sm font-bold transition-all duration-200 select-none cursor-pointer ${
               isActive
-                ? 'bg-sky-400 text-black font-bold shadow-[0_0_15px_rgba(56,189,248,0.4)]'
-                : 'text-gray-300 hover:text-white hover:bg-white/10'
+                ? 'bg-[var(--color-primary)] text-white shadow-xs'
+                : 'text-[var(--color-muted-text)] hover:text-[var(--color-text)] hover:bg-[var(--color-card)]'
             }`}
           >
             {cat}

@@ -5,16 +5,18 @@ import Footer from './modules/layout/Footer';
 import HomeView from './modules/home/HomeView';
 import ExploreView from './modules/explore/ExploreView';
 import BunkerView from './modules/bunker/BunkerView';
-import StudioModularView from './modules/studio/StudioModularView';
+import ProfileView from './modules/profile/ProfileView';
 import GlobalSearchOverlay from './modules/search/GlobalSearchOverlay';
 import { ViewState } from './types';
 import { accessibilityService } from './services/accessibility.service';
 import { useSearch } from './hooks/useSearch';
+import { useUserProfile } from './hooks/useUserProfile';
 import { allCatalogCards } from './data/catalogData';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<ViewState>('home');
   const { searchTerm, setSearchTerm, filteredCards: searchedCards } = useSearch(allCatalogCards);
+  const userProfileState = useUserProfile();
 
   useEffect(() => {
     const cleanup = accessibilityService.init();
@@ -22,7 +24,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#050505] text-gray-100 font-sans selection:bg-sky-400 selection:text-black">
+    <div className="min-h-screen flex flex-col bg-[var(--color-bg)] text-[var(--color-text)] font-sans selection:bg-[var(--color-primary)] selection:text-white transition-colors duration-300">
       {/* Decoupled Shell Navigation Module */}
       <Navbar
         currentView={currentView}
@@ -32,6 +34,7 @@ export default function App() {
         }}
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
+        profileState={userProfileState}
       />
 
       {/* Main Content Router / Viewport */}
@@ -51,30 +54,47 @@ export default function App() {
             {currentView === 'bunker' && (
               <BunkerView key="bunker" onNavigate={setCurrentView} />
             )}
-            {currentView === 'studio' && <StudioModularView key="studio" />}
+            {currentView === 'profile' && (
+              <ProfileView
+                key="profile"
+                profile={userProfileState.profile}
+                xpPercentage={userProfileState.xpPercentage}
+                onNavigate={setCurrentView}
+                onAddXpBonus={() => userProfileState.addXp(250)}
+                onMarkNotificationRead={userProfileState.markNotificationRead}
+              />
+            )}
             {currentView === 'blank' && (
               <motion.div
                 key="blank"
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}
-                className="min-h-[70vh] flex flex-col items-center justify-center gap-6 p-4 text-center"
+                className="min-h-[70vh] flex flex-col items-center justify-center gap-6 p-6 text-center max-w-xl mx-auto"
               >
-                <div className="w-16 h-16 rounded-full border-t-2 border-r-2 border-sky-400 animate-spin" />
+                <div className="w-12 h-12 sharp-corner border-2 border-[var(--color-primary)] border-t-transparent animate-spin" />
                 <div>
-                  <h2 className="text-xl font-bold text-white mb-1 readable">
-                    Recurso em Processamento
+                  <h2 className="text-xl font-bold text-[var(--color-text)] mb-2">
+                    Recurso Acadêmico em Processamento
                   </h2>
-                  <p className="text-gray-400 text-sm font-light max-w-sm readable">
-                    O módulo solicitado está em fase de compilação ou sincronização na rede do Bunker.
+                  <p className="text-[var(--color-muted-text)] text-xs leading-relaxed">
+                    O módulo selecionado está sendo carregado com excelência pedagógica e sincronização de dados.
                   </p>
                 </div>
-                <button
-                  onClick={() => setCurrentView('bunker')}
-                  className="px-6 py-2.5 bg-white/5 border border-white/10 rounded-full text-white hover:bg-sky-400 hover:text-black font-semibold text-xs transition-all readable"
-                >
-                  Retornar ao Bunker
-                </button>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setCurrentView('profile')}
+                    className="px-5 py-2.5 bg-[var(--color-primary)] text-white sharp-corner hover:bg-[var(--color-primary-deep)] font-semibold text-xs transition-all cursor-pointer shadow-xs"
+                  >
+                    Ir ao Perfil Pessoal
+                  </button>
+                  <button
+                    onClick={() => setCurrentView('home')}
+                    className="px-5 py-2.5 bg-[var(--color-muted-bg)] border border-[var(--color-muted)] text-[var(--color-text)] sharp-corner font-semibold text-xs transition-all cursor-pointer"
+                  >
+                    Voltar ao Início
+                  </button>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -86,4 +106,3 @@ export default function App() {
     </div>
   );
 }
-

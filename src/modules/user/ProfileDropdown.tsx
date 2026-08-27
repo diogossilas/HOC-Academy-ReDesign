@@ -1,11 +1,12 @@
 import { motion } from 'motion/react';
 import { UserProfile } from '../../types';
-import { Bell, Sparkles, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Bell, Sparkles, ShieldCheck, CheckCircle2, User, ArrowRight } from 'lucide-react';
 
 interface ProfileDropdownProps {
   profile: UserProfile;
   xpPercentage: number;
   onClose: () => void;
+  onOpenFullProfile?: () => void;
   onMarkRead?: (id: string) => void;
   onAddXpBonus?: () => void;
 }
@@ -13,115 +14,135 @@ interface ProfileDropdownProps {
 export default function ProfileDropdown({
   profile,
   xpPercentage,
-  onClose,
+  onClose: _onClose,
+  onOpenFullProfile,
   onMarkRead,
   onAddXpBonus,
 }: ProfileDropdownProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10, scale: 0.96 }}
+      initial={{ opacity: 0, y: 8, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: 10, scale: 0.96 }}
-      transition={{ duration: 0.2 }}
-      className="absolute top-14 right-0 w-80 sm:w-96 bg-[#0a0a0a]/95 backdrop-blur-xl rounded-2xl p-4 shadow-2xl z-50 border border-white/10"
+      exit={{ opacity: 0, y: 8, scale: 0.98 }}
+      transition={{ duration: 0.18 }}
+      className="absolute top-14 right-0 w-80 sm:w-96 bg-[var(--color-card)] backdrop-blur-xl sharp-corner p-4 shadow-xl z-50 border border-[var(--color-muted)]"
       aria-label="Painel de Informações Pessoais"
     >
-      {/* Header Profile */}
-      <div className="flex items-center gap-3 mb-4">
+      {/* Header Profile - Clicking avatar or name opens full Profile */}
+      <div
+        onClick={onOpenFullProfile}
+        className="flex items-center gap-3 mb-4 p-2 bg-[var(--color-muted-bg)] border border-transparent hover:border-[var(--color-primary)] sharp-corner transition-colors cursor-pointer group"
+      >
         <div className="relative">
           <img
             src={profile.avatar}
             alt={profile.name}
-            className="w-12 h-12 rounded-full border-2 border-sky-400 object-cover shadow-[0_0_15px_rgba(56,189,248,0.3)]"
+            className="w-12 h-12 rounded-full border-2 border-[var(--color-primary)] object-cover shadow-xs group-hover:scale-105 transition-transform"
           />
-          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-sky-400 rounded-full border-2 border-[#050505] flex items-center justify-center text-[10px] font-bold text-black">
+          <div className="absolute -bottom-1 -right-1 bg-[var(--color-primary)] text-white text-[10px] font-bold px-1 sharp-corner border border-[var(--color-card)]">
             {profile.level}
           </div>
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className="font-bold text-sm text-white truncate readable">{profile.name}</h4>
-          <p className="text-[10px] text-white/50 uppercase tracking-widest readable">{profile.title}</p>
+          <h4 className="font-bold text-sm text-[var(--color-text)] group-hover:text-[var(--color-primary)] transition-colors truncate">
+            {profile.name}
+          </h4>
+          <p className="text-xs text-[var(--color-muted-text)] truncate">{profile.title}</p>
+          <span className="text-[10px] text-[var(--color-primary)] font-semibold flex items-center gap-1 mt-0.5">
+            <User size={11} /> Ver Perfil Pessoal Completo <ArrowRight size={10} />
+          </span>
         </div>
       </div>
 
+      {/* Button To Open Full Profile */}
+      <button
+        onClick={onOpenFullProfile}
+        className="w-full mb-4 py-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-deep)] text-white text-xs font-bold sharp-corner transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+      >
+        <User size={13} />
+        <span>Abrir Página de Perfil Pessoal</span>
+      </button>
+
       {/* Experience Bar */}
-      <div className="space-y-1.5 mb-4 p-3 bg-white/5 rounded-xl border border-white/5">
-        <div className="flex justify-between items-center text-[11px] font-medium readable">
-          <span className="text-white/70">
+      <div className="space-y-1.5 mb-4 p-3 bg-[var(--color-muted-bg)] sharp-corner border border-[var(--color-muted)]">
+        <div className="flex justify-between items-center text-xs font-medium">
+          <span className="text-[var(--color-muted-text)]">
             XP: {profile.currentXp.toLocaleString()} / {profile.nextLevelXp.toLocaleString()}
           </span>
-          <span className="text-sky-400 font-bold">{xpPercentage}%</span>
+          <span className="text-[var(--color-primary)] font-bold font-mono">{xpPercentage}%</span>
         </div>
-        <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+        <div className="h-2 w-full bg-[var(--color-muted)] sharp-corner overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${xpPercentage}%` }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="bg-sky-400 h-full rounded-full shadow-[0_0_8px_rgba(56,189,248,0.5)]"
+            className="bg-emerald-500 h-full"
           />
         </div>
         {onAddXpBonus && (
           <button
             onClick={onAddXpBonus}
-            className="mt-2 text-[10px] text-sky-400 hover:text-sky-300 flex items-center gap-1 font-semibold transition-colors"
+            className="mt-2 text-xs text-[var(--color-primary)] hover:underline flex items-center gap-1 font-semibold transition-colors cursor-pointer"
           >
-            <Sparkles size={12} /> Reivindicar +250 XP diário
+            <Sparkles size={12} className="text-amber-500" /> Resgatar +250 XP diário
           </button>
         )}
       </div>
 
       {/* Subscription Info */}
-      <div className="bg-sky-400/5 border border-sky-400/20 rounded-xl p-3 mb-4">
+      <div className="bg-[var(--color-muted-bg)] border border-[var(--color-muted)] sharp-corner p-3 mb-4">
         <div className="flex justify-between items-center mb-1">
           <div className="flex items-center gap-1.5">
-            <ShieldCheck size={14} className="text-sky-400" />
-            <span className="text-[10px] font-bold text-sky-400 uppercase tracking-wider readable">
+            <ShieldCheck size={15} className="text-[var(--color-primary)]" />
+            <span className="text-xs font-bold text-[var(--color-primary)] uppercase tracking-wider">
               {profile.subscription.plan}
             </span>
           </div>
-          <span className="text-[9px] bg-sky-400 text-black px-2 py-0.5 rounded-full font-bold uppercase tracking-wider readable">
+          <span className="text-[10px] bg-[var(--color-primary)] text-white px-2 py-0.5 sharp-corner font-bold uppercase tracking-wider">
             {profile.subscription.status === 'active' ? 'Ativo' : 'Pendente'}
           </span>
         </div>
-        <p className="text-[10px] text-white/60 readable">Renovação: {profile.subscription.renewalDate}</p>
+        <p className="text-[11px] text-[var(--color-muted-text)]">Renovação: {profile.subscription.renewalDate}</p>
       </div>
 
       {/* Notifications */}
       <div>
         <div className="flex items-center justify-between mb-2.5">
-          <h4 className="text-[10px] font-bold uppercase tracking-widest text-sky-400 flex items-center gap-1.5 readable">
-            <Bell size={12} />
-            Transmissões do Bunker
+          <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--color-primary)] flex items-center gap-1.5">
+            <Bell size={13} />
+            Transmissões & Notificações
           </h4>
-          <span className="text-[10px] text-white/40">{profile.notifications.length} ativas</span>
+          <span className="text-[11px] text-[var(--color-muted-text)]">{profile.notifications.length} ativas</span>
         </div>
-        <ul className="flex flex-col gap-2 max-h-44 overflow-y-auto custom-scrollbar pr-1">
+        <ul className="flex flex-col gap-2 max-h-40 overflow-y-auto pr-1">
           {profile.notifications.length === 0 ? (
-            <li className="text-xs text-white/40 py-2 text-center">Nenhuma nova notificação.</li>
+            <li className="text-xs text-[var(--color-muted-text)] py-2 text-center">Nenhuma nova notificação.</li>
           ) : (
             profile.notifications.map((notif) => (
               <li
                 key={notif.id}
-                className={`p-2.5 bg-white/5 rounded-lg border-l-2 text-left transition-colors ${
-                  notif.isUrgent ? 'border-sky-400 hover:bg-sky-500/10' : 'border-white/20 hover:bg-white/10'
+                className={`p-2.5 sharp-corner border text-left transition-colors ${
+                  notif.isUrgent
+                    ? 'bg-sky-50 dark:bg-sky-950/30 border-sky-300 dark:border-sky-800/60'
+                    : 'bg-[var(--color-muted-bg)] border-[var(--color-muted)]'
                 }`}
               >
                 <div className="flex items-start justify-between gap-2">
-                  <strong className="block text-white text-[11px] font-semibold readable">{notif.title}</strong>
+                  <strong className="block text-[var(--color-text)] text-xs font-semibold">{notif.title}</strong>
                   {onMarkRead && (
                     <button
                       onClick={() => onMarkRead(notif.id)}
-                      className="text-white/40 hover:text-sky-400"
+                      className="text-[var(--color-muted-text)] hover:text-[var(--color-primary)]"
                       title="Marcar como lida"
                     >
-                      <CheckCircle2 size={12} />
+                      <CheckCircle2 size={13} />
                     </button>
                   )}
                 </div>
-                <span className="text-[10px] text-white/60 leading-snug block mt-1 readable">
+                <span className="text-[11px] text-[var(--color-muted-text)] leading-snug block mt-1">
                   {notif.message}
                 </span>
-                <span className="text-[9px] text-white/30 block mt-1">{notif.timestamp}</span>
+                <span className="text-[10px] text-[var(--color-muted-text)]/70 block mt-1 font-mono">{notif.timestamp}</span>
               </li>
             ))
           )}

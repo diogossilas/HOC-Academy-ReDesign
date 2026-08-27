@@ -19,25 +19,30 @@ export default function GlobalSearchOverlay({
         <div className="flex items-center gap-3">
           <button
             onClick={() => setSearchTerm('')}
-            className="p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-white flex items-center gap-1.5 text-xs font-semibold"
+            className="p-2 sharp-corner bg-[var(--color-muted-bg)] border border-[var(--color-muted)] hover:border-[var(--color-primary)] text-[var(--color-text)] flex items-center gap-1.5 text-xs font-semibold cursor-pointer transition-colors"
           >
             <ArrowLeft size={14} /> Voltar
           </button>
-          <h2 className="text-sm font-bold text-white flex items-center gap-2">
-            <Search size={16} className="text-sky-400" />
+          <h2 className="text-sm font-bold text-[var(--color-text)] flex items-center gap-2">
+            <Search size={16} className="text-[var(--color-primary)]" />
             Resultados para "{searchTerm}" ({searchedCards.length})
           </h2>
         </div>
       </div>
 
       {searchedCards.length === 0 ? (
-        <div className="py-16 text-center text-white/50 text-sm">
+        <div className="py-16 text-center text-[var(--color-muted-text)] text-sm">
           Nenhum conteúdo encontrado para o termo pesquisado.
         </div>
       ) : (
-        <div className="flex flex-wrap gap-4 justify-center sm:justify-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-5 sm:gap-6 md:gap-6 lg:gap-7 xl:gap-8 w-full">
           {searchedCards.map((card, idx) => (
-            <ContentCard key={card.id} card={card} index={idx} />
+            <ContentCard
+              key={card.id}
+              card={card}
+              index={idx}
+              variant="grid"
+            />
           ))}
         </div>
       )}

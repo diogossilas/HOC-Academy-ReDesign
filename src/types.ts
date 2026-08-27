@@ -11,16 +11,25 @@ export interface CardData {
   isSpecial?: boolean;
 }
 
-export type ViewState = 'home' | 'explore' | 'bunker' | 'studio' | 'blank';
+export type ViewState = 'home' | 'explore' | 'bunker' | 'profile' | 'blank';
 
 export interface UserProfile {
   id: string;
   name: string;
   title: string;
+  email?: string;
+  memberCode?: string;
+  joinedDate?: string;
+  bio?: string;
   avatar: string;
   level: number;
   currentXp: number;
   nextLevelXp: number;
+  readinessScore?: string;
+  studyHours?: string;
+  completedLessons?: number;
+  dossiersCount?: number;
+  badgesCount?: number;
   subscription: {
     plan: string;
     status: 'active' | 'expiring' | 'canceled';
